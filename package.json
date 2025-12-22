@@ -1,0 +1,24 @@
+{
+  "name": "social-media-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gitstorm1/social-media-server.git"
+  },
+  "keywords": [],
+  "author": "gitstorm1",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gitstorm1/social-media-server/issues"
+  },
+  "homepage": "https://github.com/gitstorm1/social-media-server#readme",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "typescript": "^5.9.3"
+  }
+}
