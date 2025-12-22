@@ -13,6 +13,13 @@
     "declaration": true,
     "declarationMap": true,
 
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    /* Performance */
+    "incremental": true,
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+
     /* Typechecking */
     "strict": true,
     "noUncheckedIndexedAccess": true,
