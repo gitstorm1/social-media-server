@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS posts (
     user_id BIGINT NOT NULL,
     content TEXT NOT NULL CHECK (char_length(content) BETWEEN 1 AND 2800),
 
-    likes_count INTEGER DEFAULT 0;
+    likes_count INTEGER DEFAULT 0,
     
     -- Foreign key (with Cascade delete)
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -132,12 +132,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger for auto-updating likes_count
-DROP TRIGGER IF EXISTS trg_update_post_likes_count ON post_likes;
-CREATE TRIGGER trg_update_post_likes_count
-AFTER INSERT OR DELETE ON post_likes
-FOR EACH ROW EXECUTE FUNCTION maintain_post_likes_count();
-
 -- Trigger for updated_at
 DROP TRIGGER IF EXISTS trg_posts_updated_at ON posts;
 CREATE TRIGGER trg_posts_updated_at
@@ -163,6 +157,12 @@ CREATE TABLE IF NOT EXISTS post_likes (
 CREATE INDEX IF NOT EXISTS idx_post_likes_user_lookup 
 ON post_likes(user_id) 
 INCLUDE (post_id);
+
+-- Trigger for auto-updating likes_count
+DROP TRIGGER IF EXISTS trg_update_post_likes_count ON post_likes;
+CREATE TRIGGER trg_update_post_likes_count
+AFTER INSERT OR DELETE ON post_likes
+FOR EACH ROW EXECUTE FUNCTION maintain_post_likes_count();
 
 -- // COMMENTS TABLE
 CREATE TABLE IF NOT EXISTS comments (
