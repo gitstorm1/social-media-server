@@ -1,10 +1,10 @@
-import pg from "pg";
+import pg from 'pg';
 const { Pool } = pg;
 
-const isProduction = process.env["NODE_ENV"] === 'production';
+const isProduction = process.env['NODE_ENV'] === 'production';
 
 export const pool = new Pool({
-    connectionString: process.env["DATABASE_URL"],
+    connectionString: process.env['DATABASE_URL'],
     ssl: isProduction
         ? { rejectUnauthorized: false }
         : false // Disables SSL for localhost
