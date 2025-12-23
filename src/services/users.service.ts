@@ -1,7 +1,12 @@
-import * as UserModel from '../models/users.model.js';
+import * as UsersModel from '../models/users.model.js';
+import { AppError } from '../utils/AppError.js';
 
 export async function fetchUser(id: string) {
-    
+    const user = await UsersModel.findById(id);
 
-    return await UserModel.findById(id);
+    if (!user) {
+        throw new AppError(404, 'User not found');
+    }
+
+    return user;
 };
