@@ -15,8 +15,8 @@ $$ LANGUAGE plpgsql;
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
-    first_name TEXT,
-    last_name TEXT,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
 
     date_of_birth DATE NOT NULL CHECK (date_of_birth < CURRENT_DATE - INTERVAL '13 years'),
 
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS users (
     pwd_hash TEXT NOT NULL,
 
     bio VARCHAR(160),
-    location TEXT,
+    location TEXT NOT NULL,
 
     avatar_url TEXT CHECK (avatar_url ~* '^https?://'),
     cover_url TEXT CHECK (cover_url ~* '^https?://'),
