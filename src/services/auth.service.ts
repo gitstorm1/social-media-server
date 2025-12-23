@@ -1,13 +1,15 @@
 import * as argon2 from "argon2";
-import * as UserModel from "../models/users.model.js";
+import * as UsersModel from "../models/users.model.js";
 
-export async function registerUser(data: any) {
-    // Hash the password
+import type { registerSchemaType } from "../validations/auth.validation.js";
+
+export async function registerUser(data: registerSchemaType) {
     const hash = await argon2.hash(data.password);
+
+    const { password, ...userData } = data;
     
-    // Save to DB (pass the hash, not the plain password)
-    return await UserModel.create({
-        ...data,
-        passwordHash: hash
+    return await UsersModel.create({
+        ...userData,
+        pwdHash: hash
     });
 }

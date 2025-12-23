@@ -9,6 +9,8 @@ export const registerSchema = z.object({
         error: "Please select a valid gender",
     }),
 
+    location: z.string().min(2, "Please enter your city or country").trim(),
+
     password: z.string().min(8, "Password must be at least 8 characters"),
 
     dateOfBirth: z.string()
@@ -20,3 +22,5 @@ export const registerSchema = z.object({
             return date <= thirteenYearsAgo;
         }, { message: "You must be at least 13 years old" }),
 });
+
+export type registerSchemaType = z.infer<typeof registerSchema>; 

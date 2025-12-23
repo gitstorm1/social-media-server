@@ -44,29 +44,25 @@ export async function findByEmail(email: string) {
     return result.rows[0] || null;
 }
 
-interface UserData {
-    id: string, // BigInt is returned as string by pg
-
-}
-
-export async function create(userData: any): Promise<UserData> {
+export async function create(userData: any) {
     const query = `
-        INSERT INTO users (first_name, last_name, gender, email, pwd_hash, location, date_of_birth)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO users (first_name, last_name, date_of_birth, gender, email, pwd_hash, location)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *;
     `;
 
     const values = [
         userData.firstName,
         userData.lastName,
-        userData.email,
-        userData.passwordHash,
+        userData.dateOfBirth,
         userData.gender,
-        userData.dateOfBirth
+        userData.email,
+        userData.pwdHash,
+        userData.location,
     ];
 
     const { rows } = await pool.query(query, values);
     
     // Return the row mapped to camelCase
-    return mapRow<UserData>(rows[0]);
+    return 0;
 }

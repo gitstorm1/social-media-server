@@ -1,6 +1,6 @@
 import { type Request, type Response } from 'express';
 import { registerSchema } from '../validations/auth.validation.js';
-import { AppError } from '../utils/AppError.js';
+//import { AppError } from '../utils/AppError.js';
 import * as AuthService from '../services/auth.service.js';
 import { generateToken } from '../utils/jwt.js';
 
@@ -13,7 +13,7 @@ export async function register(req: Request, res: Response) {
 
     res.status(201).json({
         message: "User registered successfully",
-        token,
+        token, // Shorthand for token: token
         user: newUser
     });
 }
