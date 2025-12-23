@@ -4,12 +4,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "migrate": "node-pg-migrate -j ts",
+    "migrate": "node-pg-migrate --env-file=.env -j ts",
     "build": "tsc",
     "start": "node --env-file=.env dist/index.js",
-    "dev": "tsx watch --clear-screen=false src/index.ts",
+    "dev": "tsx watch --env-file=.env --clear-screen=false src/index.ts",
     "lint": "tsc --noEmit",
-    "test": "node --test"
+    "test": "node --env-file=.env --test"
   },
   "repository": {
     "type": "git",
