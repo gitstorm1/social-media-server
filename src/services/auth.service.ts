@@ -22,7 +22,7 @@ export async function registerUser(data: registerSchemaType): Promise<string> {
         if (err instanceof DatabaseError) {
             // PostgreSQL Unique Violation error code
             if (err.code === '23505') {
-                throw new AppError(409, 'A user with this email already exists.');
+                throw new AppError(409, 'A user with this email already exists');
             }
         }
 
