@@ -1,6 +1,6 @@
-import { type Request, type Response } from 'express';
-import { AppError } from '../utils/AppError.js';
-import * as UsersService from '../services/users.service.js';
+import { type Request, type Response } from "express";
+import { AppError } from "../utils/AppError.js";
+import * as UsersService from "../services/users.service.js";
 
 export async function getUserProfile(req: Request, res: Response) {
     const { id } = req.params;

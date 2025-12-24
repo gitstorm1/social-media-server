@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
 
     date_of_birth DATE NOT NULL CHECK (date_of_birth < CURRENT_DATE - INTERVAL '13 years'),
 
-    gender TEXT NOT NULL,
+    gender TEXT NOT NULL CHECK (gender IN ('male', 'female', 'unspecified')),
 
     email CITEXT UNIQUE NOT NULL CHECK (email ~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$'),
     pwd_hash TEXT NOT NULL,

@@ -44,12 +44,22 @@ export async function findByEmail(email: string) {
     return result.rows[0] || null;
 }
 
-export async function create(userData: any) {
+interface createUserData {
+    firstName: string,
+    lastName: string,
+    dateOfBirth: Date,
+    gender: string,
+    email: string,
+    pwdHash: string,
+    location: string
+}
+
+export async function create(userData: createUserData): Promise<string> {
     const query = `
         INSERT INTO users (first_name, last_name, date_of_birth, gender, email, pwd_hash, location)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING *;
-    `;
+        RETURNING id;
+    `; // Might think about returning more values than the id later, and make a return datatype for it too
 
     const values = [
         userData.firstName,
@@ -61,8 +71,8 @@ export async function create(userData: any) {
         userData.location,
     ];
 
-    const { rows } = await pool.query(query, values);
+    const response = await pool.query(query, values);
     
-    // Return the row mapped to camelCase
-    return 0;
+    // BigInt is returned as string by pg
+    return response.rows[0].id as string;
 }

@@ -1,9 +1,9 @@
-import express, { type Request, type Response } from 'express';
-import cors from 'cors';
+import express, { type Request, type Response } from "express";
+import cors from "cors";
 
-import { globalErrorHandler } from './middleware/error.middleware.js';
+import { globalErrorHandler } from "./middleware/error.middleware.js";
 
-import { UsersRouter, AuthRouter } from './routes/index.js';
+import { UsersRouter, AuthRouter } from "./routes/index.js";
 
 const app = express();
 const PORT = +(process.env['PORT'] || 5000);

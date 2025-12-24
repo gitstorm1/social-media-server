@@ -1,5 +1,5 @@
-import * as UsersModel from '../models/users.model.js';
-import { AppError } from '../utils/AppError.js';
+import * as UsersModel from "../models/users.model.js";
+import { AppError } from "../utils/AppError.js";
 
 export async function fetchUser(id: string) {
     const user = await UsersModel.findById(id);

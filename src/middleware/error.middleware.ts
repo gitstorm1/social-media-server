@@ -1,5 +1,5 @@
-import { type Request, type Response, type NextFunction } from 'express';
-import { AppError } from '../utils/AppError.js';
+import { type Request, type Response, type NextFunction } from "express";
+import { AppError } from "../utils/AppError.js";
 
 const isProduction = process.env['NODE_ENV'] === 'production';
 

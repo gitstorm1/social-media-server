@@ -1,20 +1,26 @@
-import { type Request, type Response } from 'express';
-import { registerSchema } from '../validations/auth.validation.js';
-//import { AppError } from '../utils/AppError.js';
-import * as AuthService from '../services/auth.service.js';
-import { generateToken } from '../utils/jwt.js';
+import { type Request, type Response } from "express";
+import { registerSchema } from "../validations/auth.validation.js";
+import { AppError } from "../utils/AppError.js";
+import * as AuthService from "../services/auth.service.js";
+import { generateToken } from "../utils/jwt.js";
 
 export async function register(req: Request, res: Response) {
-    const validatedData = registerSchema.parse(req.body);
+    const result = registerSchema.safeParse(req.body);
 
-    const newUser = await AuthService.registerUser(validatedData);
+    if (!result.success) {
+        throw new AppError(400, 'Invalid request body');
+    }
 
-    const token = await generateToken({ userId: newUser.id });
+    const validatedData = result.data;
+
+    const newUserId = await AuthService.registerUser(validatedData);
+
+    const token = await generateToken({ userId: newUserId });
 
     res.status(201).json({
-        message: "User registered successfully",
+        message: 'User registered successfully',
         token, // Shorthand for token: token
-        user: newUser
+        userId: newUserId
     });
 }
 
