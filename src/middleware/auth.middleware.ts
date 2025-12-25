@@ -1,19 +1,13 @@
 import { type Request, type Response, type NextFunction } from "express";
 import { verifyJwtAndGetPayload } from "../utils/jwt.js";
 import { AppError } from "../utils/AppError.js";
-import { type UserJWTPayload } from "../types/express.js";
+import { type UserJWTPayload } from "../types/express.d.js";
 
 export async function authenticate(req: Request, res: Response, next: NextFunction) {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw new AppError(401, 'Authentication required. Please log in.');
-    }
-
-    const token = authHeader.split(" ")[1];
+    const token: string | undefined = req.cookies['accessToken'];
 
     if (!token) {
-        throw new AppError(401, 'Invalid token');
+        throw new AppError(401, 'Please log in to continue.');
     }
 
     try {

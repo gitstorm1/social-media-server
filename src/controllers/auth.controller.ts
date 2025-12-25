@@ -4,11 +4,11 @@ import { AppError } from "../utils/AppError.js";
 import * as AuthService from "../services/auth.service.js";
 import { generateToken } from "../utils/jwt.js";
 
+const isProduction = process.env["NODE_ENV"] === 'production';
+
 function checkLoggedIn(req: Request) {
-    const authHeader = req.headers.authorization;
-    
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-        throw new AppError(403, 'You are already logged in. Please log out to register a new account.');
+    if (req.cookies['accessToken']) {
+        throw new AppError(403, 'You are already logged in. Please log out first.');
     }
 }
 
@@ -28,9 +28,15 @@ export async function register(req: Request, res: Response) {
     // Send a token back so the user is logged in
     const token = await generateToken({ userId: newUserId });
 
+    res.cookie('accessToken', token, {
+        httpOnly: true, // Prevents JavaScript access
+        secure: isProduction, // HTTPS in production
+        sameSite: 'strict', // Prevents CSRF attacks
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+    });
+
     res.status(201).json({
         message: 'User registered successfully',
-        token: token,
         userId: newUserId,
     });
 }
@@ -49,9 +55,15 @@ export async function login(req: Request, res: Response) {
     // Send a token back so the user is logged in
     const token = await generateToken({ userId: user.id });
 
+    res.cookie('accessToken', token, {
+        httpOnly: true, // Prevents JavaScript access
+        secure: isProduction, // HTTPS in production
+        sameSite: 'strict', // Prevents CSRF attacks
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+    });
+
     res.status(200).json({
         message: 'Login successful',
-        token: token,
         userId: user.id,
     });
 }
