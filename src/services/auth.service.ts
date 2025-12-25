@@ -9,13 +9,13 @@ import type { registerSchemaType } from "../validations/auth.validation.js";
 export async function registerUser(data: registerSchemaType): Promise<string> {
     const hash = await argon2.hash(data.password); // Later make it more secure / add salting, etc.
 
-    const { password, ...userData } = data;
+    const { password, ...userDataWithoutPassword } = data;
     
     let userId: string;
 
     try {
         userId = await UsersModel.create({
-            ...userData,
+            ...userDataWithoutPassword,
             pwdHash: hash
         })
     } catch(err: unknown) {

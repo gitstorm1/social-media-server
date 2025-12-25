@@ -12,8 +12,6 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
 
     try {
         const payload = await verifyJwtAndGetPayload(token);
-        
-        console.log(payload);
 
         req.user = payload as unknown as UserJWTPayload;
 
