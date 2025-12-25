@@ -1,6 +1,7 @@
 import { type Request, type Response, type NextFunction } from "express";
 import { verifyJwtAndGetPayload } from "../utils/jwt.js";
 import { AppError } from "../utils/AppError.js";
+import { type UserJWTPayload } from "../types/express.js";
 
 export async function authenticate(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
@@ -17,10 +18,10 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
 
     try {
         const payload = await verifyJwtAndGetPayload(token);
-
+        
         console.log(payload);
 
-        req.user = payload as any;
+        req.user = payload as unknown as UserJWTPayload;
 
         next();
     } catch (error) {
