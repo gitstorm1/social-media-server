@@ -2,7 +2,7 @@ import { SignJWT } from "jose";
 
 const SECRET = new TextEncoder().encode(process.env['JWT_SECRET']);
 
-export async function generateToken(payload: any) {
+export async function generateToken(payload: Record<string, any>) {
     return await new SignJWT(payload)
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
