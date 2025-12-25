@@ -14,7 +14,7 @@ export async function globalErrorHandler(err: any, req: Request, res: Response, 
     message, // (shorthand for message: message)
     ...(!isProduction && { stack: err.stack }),
   };
-
+  
   console.error(`[Error] ${req.method} ${req.path}:`, err);
 
   res.status(statusCode).json(response);

@@ -4,7 +4,17 @@ import { AppError } from "../utils/AppError.js";
 import * as AuthService from "../services/auth.service.js";
 import { generateToken } from "../utils/jwt.js";
 
+function checkLoggedIn(req: Request) {
+    const authHeader = req.headers.authorization;
+    
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        throw new AppError(403, 'You are already logged in. Please log out to register a new account.');
+    }
+}
+
 export async function register(req: Request, res: Response) {
+    checkLoggedIn(req);
+
     const result = registerSchema.safeParse(req.body);
 
     if (!result.success) {
@@ -26,6 +36,8 @@ export async function register(req: Request, res: Response) {
 }
 
 export async function login(req: Request, res: Response) {
+    checkLoggedIn(req);
+
     const { email, password } = req.body;
 
     if (!email || !password) {
