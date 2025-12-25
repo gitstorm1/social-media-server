@@ -12,3 +12,7 @@ export async function getUserProfile(req: Request, res: Response) {
     const user = await UsersService.fetchUser(id);
     res.json(user);
 }
+
+export async function updateUserProfileFields(req: Request, res: Response) {
+    
+}

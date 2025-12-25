@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getUserProfile } from "../controllers/users.controller.js";
+import * as UsersController from "../controllers/users.controller.js";
 
 const router = Router();
 
-router.get('/users/:id', getUserProfile);
+router.get('/users/:id', UsersController.getUserProfile);
+router.patch('/users/me', UsersController.updateUserProfileFields);
 
 export default router;
