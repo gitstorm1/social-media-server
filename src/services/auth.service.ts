@@ -6,15 +6,15 @@ import { AppError } from "../utils/AppError.js";
 
 import type { registerSchemaType } from "../validations/auth.validation.js";
 
-export async function registerUser(data: registerSchemaType): Promise<string> {
+export async function registerUser(data: registerSchemaType) {
     const hash = await argon2.hash(data.password); // Later make it more secure / add salting, etc.
 
     const { password, ...userDataWithoutPassword } = data;
     
-    let userId: string;
+    let newUserExcludingHash;
 
     try {
-        userId = await UsersModel.create({
+        newUserExcludingHash = await UsersModel.create({
             ...userDataWithoutPassword,
             pwdHash: hash
         })
@@ -30,7 +30,7 @@ export async function registerUser(data: registerSchemaType): Promise<string> {
         throw err;
     }
 
-    return userId;
+    return newUserExcludingHash;
 }
 
 export async function checkLoginCredentials(email: string, password: string) {

@@ -35,13 +35,13 @@ export async function register(req: Request, res: Response) {
 
     const validatedData = result.data;
 
-    const newUserId = await AuthService.registerUser(validatedData);
+    const newUser = await AuthService.registerUser(validatedData);
 
-    await setAuthCookie(res, newUserId);
+    await setAuthCookie(res, newUser.id);
 
     res.status(201).json({
         message: 'User registered successfully',
-        userId: newUserId,
+        user: newUser,
     });
 }
 
@@ -62,6 +62,6 @@ export async function login(req: Request, res: Response) {
 
     res.status(200).json({
         message: 'Login successful',
-        userId: user.id,
+        user: user,
     });
 }

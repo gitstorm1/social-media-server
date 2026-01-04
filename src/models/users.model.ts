@@ -165,11 +165,11 @@ interface createUserData {
     location: string
 }
 
-export async function create(userData: createUserData): Promise<string> {
+export async function create(userData: createUserData) {
     const query = `
         INSERT INTO users (first_name, last_name, date_of_birth, gender, email, pwd_hash, location)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING id;
+        RETURNING id, bio, avatar_url, cover_url, created_at;
     `;
     
     // I don't see the need to return any details other than the ID, because they
@@ -186,7 +186,19 @@ export async function create(userData: createUserData): Promise<string> {
     ];
 
     const response = await pool.query(query, values);
+
+    const firstRow = response.rows[0];
+
+    const { pwdHash, ...userDataExcludingHash } = userData;
+
+    const newUser = {
+        ...userDataExcludingHash,
+        id: firstRow.id as string, // BigInt is returned as string by pg
+        bio: firstRow.bio as string | null,
+        avatarUrl: firstRow.avatar_url as string | null,
+        coverUrl: firstRow.cover_url as string | null,
+        createdAt: firstRow.created_at as Date,
+    };
     
-    // BigInt is returned as string by pg
-    return response.rows[0].id as string;
+    return newUser;
 }
