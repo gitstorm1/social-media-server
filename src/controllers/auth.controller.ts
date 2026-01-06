@@ -2,13 +2,20 @@ import { type Request, type Response } from "express";
 import { registerSchema } from "../validations/auth.validation.js";
 import { AppError } from "../utils/AppError.js";
 import * as AuthService from "../services/auth.service.js";
-import { generateToken } from "../utils/jwt.js";
+import { generateToken, verifyJwtAndGetPayload } from "../utils/jwt.js";
 
 const isProduction = process.env['NODE_ENV'] === 'production';
 
-function checkLoggedIn(req: Request) {
-    if (req.cookies['accessToken']) {
-        throw new AppError(403, 'You are already logged in. Please log out first.');
+async function checkLoggedIn(req: Request) {
+    const token = req.cookies['accessToken'];
+
+    if (!token) return;
+    
+    try {
+        await verifyJwtAndGetPayload(token);
+        throw new AppError(403, 'You are already logged in with an active session.');
+    } catch (err: any) {
+        return;
     }
 }
 
@@ -25,7 +32,7 @@ async function setAuthCookie(res: Response, userId: string) {
 }
 
 export async function register(req: Request, res: Response) {
-    checkLoggedIn(req);
+    await checkLoggedIn(req);
 
     const result = registerSchema.safeParse(req.body);
 
@@ -46,7 +53,7 @@ export async function register(req: Request, res: Response) {
 }
 
 export async function login(req: Request, res: Response) {
-    checkLoggedIn(req);
+    await checkLoggedIn(req);
 
     const { email, password } = req.body;
 

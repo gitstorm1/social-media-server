@@ -13,6 +13,13 @@ export async function getUserProfile(req: Request, res: Response) {
     res.json(user);
 }
 
+export async function getThisUserProfile(req: Request, res: Response) {
+    const user = req.user as NonNullable<typeof req.user>;
+
+    const publicUser = await UsersService.fetchUser(user.userId);
+    res.json(publicUser);
+}
+
 export async function updateUserProfileFields(req: Request, res: Response) {
     
 }
